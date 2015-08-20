@@ -1,10 +1,10 @@
 package com.github.proglottis.ladders;
 
-import android.app.Activity;
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.github.proglottis.ladders.data.Tournament;
@@ -12,25 +12,52 @@ import com.github.proglottis.ladders.data.Tournament;
 /**
  * Created by james on 19/08/15.
  */
-public class TournamentListAdapter extends ArrayAdapter<Tournament> {
-    private final Activity context;
+public class TournamentListAdapter extends RecyclerView.Adapter<TournamentListAdapter.ViewHolder> {
+    private final Context context;
     private final Tournament[] values;
+    private OnItemSelectedListener listener;
 
-    public TournamentListAdapter(Activity context, Tournament[] values) {
-        super(context, R.layout.tournament_list_item, values);
+    public TournamentListAdapter(Context context, Tournament[] values, OnItemSelectedListener listener) {
         this.context = context;
         this.values = values;
+        this.listener = listener;
+    }
+
+
+    @Override
+    public TournamentListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.tournament_list_item, parent, false);
+        return new ViewHolder(v);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.tournament_list_item, parent, false);
-        }
-        TextView name = (TextView) convertView.findViewById(R.id.name);
-        name.setText(values[position].getName());
+    public void onBindViewHolder(TournamentListAdapter.ViewHolder holder, final int position) {
+        holder.name.setText(values[position].getName());
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemSelected(position);
+            }
+        });
+    }
 
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return values.length;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        View root;
+        TextView name;
+
+        public ViewHolder(View v) {
+            super(v);
+            root = v;
+            name = (TextView) v.findViewById(R.id.name);
+        }
+    }
+
+    public interface OnItemSelectedListener {
+        void onItemSelected(int position);
     }
 }

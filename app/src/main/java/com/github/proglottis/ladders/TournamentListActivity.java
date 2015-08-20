@@ -1,14 +1,14 @@
 package com.github.proglottis.ladders;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -16,11 +16,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Tournament;
 
-public class TournamentListActivity extends ListActivity implements Response.Listener<Tournament[]>{
+public class TournamentListActivity extends AppCompatActivity implements Response.Listener<Tournament[]>,TournamentListAdapter.OnItemSelectedListener {
     private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
     private View progressBar;
     private View content;
+    private RecyclerView recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,8 @@ public class TournamentListActivity extends ListActivity implements Response.Lis
 
         progressBar = findViewById(R.id.progress);
         content = findViewById(R.id.content);
+        recycler = (RecyclerView) findViewById(R.id.recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
 
         makeRequest();
     }
@@ -55,20 +58,8 @@ public class TournamentListActivity extends ListActivity implements Response.Lis
     public void onResponse(Tournament[] tournaments) {
         this.tournaments = tournaments;
         showContent();
-        ListAdapter adapter = new TournamentListAdapter(TournamentListActivity.this, tournaments);
-        setListAdapter(adapter);
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        if(tournaments == null) {
-            return;
-        }
-        Intent intent = new Intent(this, TournamentActivity.class);
-        intent.putExtra(TournamentActivity.TOURNAMENT_ID, tournaments[position].getId());
-        intent.putExtra(TournamentActivity.TOURNAMENT_NAME, tournaments[position].getName());
-        startActivity(intent);
+        TournamentListAdapter adapter = new TournamentListAdapter(TournamentListActivity.this, tournaments, this);
+        recycler.setAdapter(adapter);
     }
 
     @Override
@@ -91,5 +82,16 @@ public class TournamentListActivity extends ListActivity implements Response.Lis
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(int position) {
+        if(tournaments == null) {
+            return;
+        }
+        Intent intent = new Intent(this, TournamentActivity.class);
+        intent.putExtra(TournamentActivity.TOURNAMENT_ID, tournaments[position].getId());
+        intent.putExtra(TournamentActivity.TOURNAMENT_NAME, tournaments[position].getName());
+        startActivity(intent);
     }
 }
