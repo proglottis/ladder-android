@@ -8,20 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.UUID;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private Button googleBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        googleBtn = (Button) findViewById(R.id.google_btn);
+        Button googleBtn = (Button) findViewById(R.id.google_btn);
         googleBtn.setOnClickListener(this);
     }
 
@@ -49,31 +45,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        try {
-            switch(view.getId()){
-            case R.id.google_btn:
-                String state = UUID.randomUUID().toString();
-                String googleURL = getString(R.string.google_base_uri)
-                        + "?access_type=offline"
-                        + "&client_id="
-                        + getString(R.string.google_client_id)
-                        + "&redirect_uri="
-                        + getString(R.string.google_redirect_uri)
-                        + "&response_type=code"
-                        + "&scope="
-                        + getString(R.string.google_scope)
-                        + "&state="
-                        + state;
-                URL authURL = new URL(googleURL);
-
-                Intent intent = new Intent(this, AuthActivity.class);
-                intent.putExtra(AuthActivity.EXTRA_URL, authURL.toString());
-                intent.putExtra(AuthActivity.EXTRA_STATE, state);
-                startActivity(intent);
-                break;
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        switch(view.getId()){
+        case R.id.google_btn:
+            startGoogleAuth();
+            break;
         }
+    }
+
+    private void startGoogleAuth() {
+        String state = UUID.randomUUID().toString();
+        String url = getString(R.string.google_base_uri)
+                + "?access_type=offline"
+                + "&client_id="
+                + getString(R.string.google_client_id)
+                + "&redirect_uri="
+                + getString(R.string.google_redirect_uri)
+                + "&response_type=code"
+                + "&scope="
+                + getString(R.string.google_scope)
+                + "&state="
+                + state;
+
+        Intent intent = new Intent(this, AuthActivity.class);
+        intent.putExtra(AuthActivity.EXTRA_URL, url);
+        intent.putExtra(AuthActivity.EXTRA_STATE, state);
+        startActivity(intent);
     }
 }

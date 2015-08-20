@@ -60,6 +60,22 @@ public class Tournament implements Parcelable {
         return t;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(name);
+        parcel.writeInt(isPublic ? 1 : 0);
+        parcel.writeString(rankingType);
+        parcel.writeString(createdAt);
+        parcel.writeInt(players.length);
+        parcel.writeTypedArray(players, i);
+    }
+
     public String getId() {
         return id;
     }
@@ -106,21 +122,5 @@ public class Tournament implements Parcelable {
 
     public void setPlayers(Player[] players) {
         this.players = players;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(name);
-        parcel.writeInt(isPublic ? 1 : 0);
-        parcel.writeString(rankingType);
-        parcel.writeString(createdAt);
-        parcel.writeInt(players.length);
-        parcel.writeTypedArray(players, i);
     }
 }

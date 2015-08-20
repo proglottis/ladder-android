@@ -42,18 +42,6 @@ public class User implements Parcelable {
         return user;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -64,5 +52,17 @@ public class User implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(imageURL);
         parcel.writeString(name);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public String getName() {
+        return name;
     }
 }
