@@ -4,14 +4,11 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -22,18 +19,23 @@ import com.github.proglottis.ladders.data.Tournament;
 public class TournamentListActivity extends ListActivity implements Response.Listener<Tournament[]>{
     private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
+    private View progressBar;
+    private View content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament_list);
 
-        ProgressBar progressBar = new ProgressBar(this);
-        progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-        progressBar.setIndeterminate(true);
-        getListView().setEmptyView(progressBar);
+        progressBar = findViewById(R.id.progress);
+        content = findViewById(R.id.content);
 
         makeRequest();
+    }
+
+    private void showContent() {
+        progressBar.setVisibility(View.INVISIBLE);
+        content.setVisibility(View.VISIBLE);
     }
 
     private void makeRequest() {
@@ -52,6 +54,7 @@ public class TournamentListActivity extends ListActivity implements Response.Lis
     @Override
     public void onResponse(Tournament[] tournaments) {
         this.tournaments = tournaments;
+        showContent();
         ListAdapter adapter = new TournamentListAdapter(TournamentListActivity.this, tournaments);
         setListAdapter(adapter);
     }
