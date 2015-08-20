@@ -21,7 +21,12 @@
         </activity>
         <activity
             android:name=".AuthActivity"
-            android:label="@string/title_activity_auth" >
+            android:label="@string/title_activity_auth"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
         </activity>
         <activity
             android:name=".TournamentListActivity"

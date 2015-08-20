@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -17,11 +16,13 @@ import com.github.proglottis.ladders.data.AuthToken;
 
 public class AuthActivity extends AppCompatActivity implements Response.Listener<AuthToken>, OAuth2WebViewClient.Callback {
     private static final String TAG = AuthActivity.class.getSimpleName();
-    public static final String EXTRA_URL = "com.github.proglottis.ladders.extra_url";
-    public static final String EXTRA_STATE = "com.github.proglottis.ladders.extra_state";
+    public static final String AUTH_URL = "com.github.proglottis.ladders.auth_url";
+    public static final String AUTH_STATE = "com.github.proglottis.ladders.auth_state";
 
     private String url;
     private String state;
+    private View progressBar;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +30,29 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
         setContentView(R.layout.activity_auth);
 
         Intent intent = getIntent();
-        url = intent.getStringExtra(EXTRA_URL);
-        state = intent.getStringExtra(EXTRA_STATE);
+        url = intent.getStringExtra(AUTH_URL);
+        state = intent.getStringExtra(AUTH_STATE);
 
-        WebView webView = (WebView) findViewById(R.id.web_view);
+        progressBar = findViewById(R.id.progress);
+        webView = (WebView) findViewById(R.id.web_view);
         webView.setWebViewClient(new OAuth2WebViewClient(getString(R.string.google_redirect_uri), this));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         webView.loadUrl(url);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        webView.stopLoading();
+        AppController.getInstance().cancelPendingRequests(TAG);
+    }
+
     public void onCallback(String callbackCode, String callbackState) {
+        hideContent();
         if(!java.security.MessageDigest.isEqual(callbackState.getBytes(), state.getBytes())) {
             onAuthFailure();
             return;
@@ -49,7 +64,7 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
             onAuthFailure();
             }
         });
-        AppController.getInstance().addToRequestQueue(req);
+        AppController.getInstance().addToRequestQueue(req, TAG);
     }
 
     private void onAuthFailure() {
@@ -70,25 +85,8 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_auth, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void hideContent() {
+        progressBar.setVisibility(View.VISIBLE);
+        webView.setVisibility(View.INVISIBLE);
     }
 }

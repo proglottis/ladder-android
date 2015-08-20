@@ -67,8 +67,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 + state;
 
         Intent intent = new Intent(this, AuthActivity.class);
-        intent.putExtra(AuthActivity.EXTRA_URL, url);
-        intent.putExtra(AuthActivity.EXTRA_STATE, state);
+        intent.putExtra(AuthActivity.AUTH_URL, url);
+        intent.putExtra(AuthActivity.AUTH_STATE, state);
         startActivity(intent);
     }
 }
