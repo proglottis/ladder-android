@@ -9,10 +9,10 @@ import org.json.JSONObject;
  * Created by james on 20/08/15.
  */
 public class Token {
-    private long sub;
     private long iat;
     private long exp;
-    private String name;
+    private String userId;
+    private String userName;
 
     public static Token decode(String s) throws JSONException {
         s = s.substring(s.indexOf('.'), s.lastIndexOf('.'));
@@ -22,19 +22,11 @@ public class Token {
 
     public static Token fromJSON(JSONObject obj) throws JSONException {
         Token t = new Token();
-        t.sub = obj.getLong("sub");
         t.iat = obj.getLong("iat");
         t.exp = obj.getLong("exp");
-        t.name = obj.getString("name");
+        t.userId = obj.getString("user_id");
+        t.userName = obj.getString("user_name");
         return t;
-    }
-
-    public String getId() {
-        return String.valueOf(sub);
-    }
-
-    public long getSub() {
-        return sub;
     }
 
     public long getIat() {
@@ -45,7 +37,11 @@ public class Token {
         return exp;
     }
 
-    public String getName() {
-        return name;
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

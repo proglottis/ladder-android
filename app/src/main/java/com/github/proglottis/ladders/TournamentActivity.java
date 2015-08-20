@@ -16,7 +16,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Player;
+import com.github.proglottis.ladders.data.Token;
 import com.github.proglottis.ladders.data.Tournament;
+
+import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -74,7 +77,7 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
 
     public void updateView() {
         setTitle(tournament.getName());
-        if(tournament.getPlayers() == null) {
+        if (tournament.getPlayers() == null) {
             return;
         }
         Player[] players = tournament.getPlayers();
@@ -90,7 +93,14 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
                 }
             }
         });
-        playerList.setAdapter(new PlayerListAdapter(this, players));
+        String currentUserId;
+        try {
+            String rawToken = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);
+            currentUserId = Token.decode(rawToken).getUserId();
+        } catch (JSONException e) {
+            currentUserId = null;
+        }
+        playerList.setAdapter(new PlayerListAdapter(this, currentUserId, players));
     }
 
     public void showContent() {
