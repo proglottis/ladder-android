@@ -19,14 +19,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Tournament;
 
-public class MainActivity extends ListActivity implements Response.Listener<Tournament[]>{
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class TournamentListActivity extends ListActivity implements Response.Listener<Tournament[]>{
+    private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_tournament_list);
 
         ProgressBar progressBar = new ProgressBar(this);
         progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, Gravity.CENTER));
@@ -52,7 +52,7 @@ public class MainActivity extends ListActivity implements Response.Listener<Tour
     @Override
     public void onResponse(Tournament[] tournaments) {
         this.tournaments = tournaments;
-        ListAdapter adapter = new TournamentListAdapter(MainActivity.this, tournaments);
+        ListAdapter adapter = new TournamentListAdapter(TournamentListActivity.this, tournaments);
         setListAdapter(adapter);
     }
 

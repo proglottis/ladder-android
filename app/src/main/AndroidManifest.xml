@@ -11,20 +11,20 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:name=".TournamentListActivity"
+            android:label="@string/title_activity_tournament_list" >
         </activity>
         <activity
             android:name=".TournamentActivity"
             android:label="@string/title_activity_tournament"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".TournamentListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.proglottis.ladders.MainActivity" />
+                android:value=".TournamentListActivity" />
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
