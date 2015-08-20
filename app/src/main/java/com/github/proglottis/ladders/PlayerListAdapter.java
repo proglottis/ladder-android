@@ -24,10 +24,12 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView position;
         public TextView name;
         public ImageView image;
         public ViewHolder(View v) {
             super(v);
+            position = (TextView) v.findViewById(R.id.position);
             name = (TextView) v.findViewById(R.id.name);
             image = (ImageView) v.findViewById(R.id.image);
         }
@@ -50,7 +52,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if(players[position].getPosition() != null) {
+            holder.position.setText(String.valueOf(players[position].getPosition()));
+        } else {
+            holder.position.setText("");
+        }
         Picasso.with(context).load(players[position].getUser().getImageURL()).into(holder.image);
+
         if(players[position].getUser().getId().equals(currentUserId)) {
             holder.name.setText(players[position].getUser().getName() + " *");
         } else {

@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,13 +47,28 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
         newGameBtn = (FloatingActionButton) findViewById(R.id.new_game_btn);
         newGameBtn.setOnClickListener(this);
 
-        Intent intent = getIntent();
         tournament = new Tournament();
-        tournament.setId(intent.getStringExtra(TOURNAMENT_ID));
-        tournament.setName(intent.getStringExtra(TOURNAMENT_NAME));
-        updateView();
 
+        if(savedInstanceState == null) {
+            Intent intent = getIntent();
+            tournament.setId(intent.getStringExtra(TOURNAMENT_ID));
+            tournament.setName(intent.getStringExtra(TOURNAMENT_NAME));
+            Log.d(TAG, "INTENT TOURNAMENT ID: " + tournament.getId());
+        } else {
+            tournament.setId(savedInstanceState.getString(TOURNAMENT_ID));
+            tournament.setName(savedInstanceState.getString(TOURNAMENT_NAME));
+            Log.d(TAG, "BUNDLE TOURNAMENT ID: " + tournament.getId());
+        }
+        updateView();
         makeRequest(tournament.getId());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "SAVING TOURNAMENT ID: " + tournament.getId());
+        outState.putString(TOURNAMENT_ID, tournament.getId());
+        outState.putString(TOURNAMENT_NAME, tournament.getName());
+        super.onSaveInstanceState(outState);
     }
 
     private void makeRequest(String tournamentId) {

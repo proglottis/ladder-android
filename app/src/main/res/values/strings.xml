@@ -15,4 +15,8 @@
 
     <!-- Preferences keys -->
     <string name="api_token">api_token</string>
+    <string name="create_game">Create Game</string>
+    <string name="loser">Loser</string>
+    <string name="winner">Winner</string>
+    <string name="request_failed">Request failed</string>
 </resources>

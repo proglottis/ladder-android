@@ -30,11 +30,12 @@
         </activity>
         <activity
             android:name=".TournamentListActivity"
-            android:label="@string/title_activity_tournament_list" >
+            android:label="@string/title_activity_tournament_list">
         </activity>
         <activity
             android:name=".TournamentActivity"
             android:label="@string/title_activity_tournament"
+            android:launchMode="singleTop"
             android:parentActivityName=".TournamentListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

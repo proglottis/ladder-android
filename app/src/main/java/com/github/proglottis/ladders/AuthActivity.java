@@ -60,8 +60,8 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
         AuthTokenRequest req = new AuthTokenRequest("google", callbackCode, getString(R.string.google_client_id), getString(R.string.google_redirect_uri), this, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError e) {
-            Log.d(TAG, "Error: " + e.getLocalizedMessage());
-            onAuthFailure();
+                Log.d(TAG, "Error: " + e.getLocalizedMessage());
+                onAuthFailure();
             }
         });
         AppController.getInstance().addToRequestQueue(req, TAG);
