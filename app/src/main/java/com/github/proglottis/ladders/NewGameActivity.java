@@ -127,6 +127,7 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onResponse(Game response) {
+        setResult(RESULT_OK);
         finish();
     }
 }

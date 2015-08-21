@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
     private static final String TAG = TournamentActivity.class.getSimpleName();
     public static final String TOURNAMENT_ID = "com.github.proglottis.ladders.tournament_id";
     public static final String TOURNAMENT_NAME = "com.github.proglottis.ladders.tournament_name";
+    public static final int NEW_GAME_REQUEST = 1000;
     private Tournament tournament;
     private View progressBar;
     private View content;
@@ -154,8 +156,17 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
         case R.id.new_game_btn:
             Intent intent = new Intent(this, NewGameActivity.class);
             intent.putExtra(NewGameActivity.TOURNAMENT_EXTRA, tournament);
-            startActivity(intent);
+            startActivityForResult(intent, NEW_GAME_REQUEST);
             break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NEW_GAME_REQUEST && resultCode == RESULT_OK) {
+            Snackbar.make(content, R.string.game_created, Snackbar.LENGTH_LONG).show();
         }
     }
 }
