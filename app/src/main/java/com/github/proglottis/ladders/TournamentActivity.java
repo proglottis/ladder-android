@@ -100,13 +100,15 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
         Arrays.sort(players, new Comparator<Player>() {
             @Override
             public int compare(Player p1, Player p2) {
-                if (p1.getPosition() == null) {
-                    return 1;
-                } else if (p2.getPosition() == null) {
-                    return -1;
-                } else {
-                    return p1.getPosition().compareTo(p2.getPosition());
+                Integer pos1 = p1.getPosition();
+                Integer pos2 = p2.getPosition();
+                if(pos1 == null) {
+                    pos1 = Integer.MAX_VALUE;
                 }
+                if(pos2 == null) {
+                    pos2 = Integer.MAX_VALUE;
+                }
+                return pos1.compareTo(pos2);
             }
         });
         String currentUserId;
