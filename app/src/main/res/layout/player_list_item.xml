@@ -28,4 +28,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="8"/>
 
+    <TextView
+        android:id="@+id/streak"
+        tools:text="12"
+        tools:visibility="visible"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:gravity="center"/>
+
 </LinearLayout>

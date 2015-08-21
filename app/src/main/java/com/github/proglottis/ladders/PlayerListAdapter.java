@@ -27,11 +27,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         public TextView position;
         public TextView name;
         public ImageView image;
+        public TextView streak;
         public ViewHolder(View v) {
             super(v);
             position = (TextView) v.findViewById(R.id.position);
             name = (TextView) v.findViewById(R.id.name);
             image = (ImageView) v.findViewById(R.id.image);
+            streak = (TextView) v.findViewById(R.id.streak);
         }
     }
 
@@ -63,6 +65,18 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             holder.name.setText(players[position].getUser().getName() + " *");
         } else {
             holder.name.setText(players[position].getUser().getName());
+        }
+
+        if(players[position].getWinningStreakCount() >= 3) {
+            holder.streak.setVisibility(View.VISIBLE);
+            holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_green));
+            holder.streak.setText(String.valueOf(players[position].getWinningStreakCount()));
+        } else if(players[position].getLosingStreakCount() >= 3) {
+            holder.streak.setVisibility(View.VISIBLE);
+            holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_red));
+            holder.streak.setText(String.valueOf(players[position].getLosingStreakCount()));
+        } else {
+            holder.streak.setVisibility(View.GONE);
         }
     }
 
