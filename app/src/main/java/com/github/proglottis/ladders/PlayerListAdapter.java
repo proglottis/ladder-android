@@ -76,7 +76,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_red));
             holder.streak.setText(String.valueOf(players[position].getLosingStreakCount()));
         } else {
-            holder.streak.setVisibility(View.GONE);
+            holder.streak.setVisibility(View.INVISIBLE);
         }
     }
 
