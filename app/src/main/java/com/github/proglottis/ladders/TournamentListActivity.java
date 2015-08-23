@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Tournament;
+import com.github.proglottis.ladders.requests.TournamentListRequest;
 
 public class TournamentListActivity extends AppCompatActivity implements Response.Listener<Tournament[]>,TournamentListAdapter.OnItemSelectedListener {
     private static final String TAG = TournamentListActivity.class.getSimpleName();

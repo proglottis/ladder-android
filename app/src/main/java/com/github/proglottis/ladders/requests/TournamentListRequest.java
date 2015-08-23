@@ -1,4 +1,4 @@
-package com.github.proglottis.ladders;
+package com.github.proglottis.ladders.requests;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -13,7 +13,6 @@ import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,12 +38,7 @@ public class TournamentListRequest extends Request<Tournament[]> {
             for(int i = 0; i < json.length(); i++) {
                 tournaments[i] = Tournament.fromJSON(json.getJSONObject(i));
             }
-            Arrays.sort(tournaments, new Comparator<Tournament>() {
-                @Override
-                public int compare(Tournament t1, Tournament t2) {
-                    return t1.getName().compareTo(t2.getName());
-                }
-            });
+            Arrays.sort(tournaments, Tournament.BY_NAME);
             return Response.success(tournaments, HttpHeaderParser.parseCacheHeaders(response));
         } catch (JSONException e) {
             return Response.error(new ParseError(e));

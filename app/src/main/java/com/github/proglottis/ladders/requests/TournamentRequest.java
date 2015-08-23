@@ -1,4 +1,4 @@
-package com.github.proglottis.ladders;
+package com.github.proglottis.ladders.requests;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

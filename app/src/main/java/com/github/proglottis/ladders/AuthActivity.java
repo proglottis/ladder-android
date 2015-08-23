@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.proglottis.ladders.data.AuthToken;
+import com.github.proglottis.ladders.requests.AuthTokenRequest;
 
 public class AuthActivity extends AppCompatActivity implements Response.Listener<AuthToken>, OAuth2WebViewClient.Callback {
     private static final String TAG = AuthActivity.class.getSimpleName();

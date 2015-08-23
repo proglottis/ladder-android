@@ -54,27 +54,28 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(players[position].getPosition() != null) {
-            holder.position.setText(String.valueOf(players[position].getPosition()));
+        Player player = players[position];
+        if(player.getPosition() != null) {
+            holder.position.setText(String.valueOf(player.getPosition()));
         } else {
             holder.position.setText("");
         }
-        Picasso.with(context).load(players[position].getUser().getImageURL()).into(holder.image);
+        Picasso.with(context).load(player.getUser().getImageURL()).into(holder.image);
 
-        if(players[position].getUser().getId().equals(currentUserId)) {
-            holder.name.setText(players[position].getUser().getName() + " *");
+        if(player.getUser().getId().equals(currentUserId)) {
+            holder.name.setText(player.getUser().getName() + " *");
         } else {
-            holder.name.setText(players[position].getUser().getName());
+            holder.name.setText(player.getUser().getName());
         }
 
-        if(players[position].getWinningStreakCount() >= 3) {
+        if(player.getWinningStreakCount() >= 3) {
             holder.streak.setVisibility(View.VISIBLE);
             holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_green));
-            holder.streak.setText(String.valueOf(players[position].getWinningStreakCount()));
-        } else if(players[position].getLosingStreakCount() >= 3) {
+            holder.streak.setText(String.valueOf(player.getWinningStreakCount()));
+        } else if(player.getLosingStreakCount() >= 3) {
             holder.streak.setVisibility(View.VISIBLE);
             holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_red));
-            holder.streak.setText(String.valueOf(players[position].getLosingStreakCount()));
+            holder.streak.setText(String.valueOf(player.getLosingStreakCount()));
         } else {
             holder.streak.setVisibility(View.INVISIBLE);
         }

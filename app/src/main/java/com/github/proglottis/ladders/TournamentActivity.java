@@ -20,11 +20,11 @@ import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Player;
 import com.github.proglottis.ladders.data.Token;
 import com.github.proglottis.ladders.data.Tournament;
+import com.github.proglottis.ladders.requests.TournamentRequest;
 
 import org.json.JSONException;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class TournamentActivity extends AppCompatActivity implements Response.Listener<Tournament>, View.OnClickListener {
     private static final String TAG = TournamentActivity.class.getSimpleName();
@@ -99,20 +99,7 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
             return;
         }
         Player[] players = tournament.getPlayers();
-        Arrays.sort(players, new Comparator<Player>() {
-            @Override
-            public int compare(Player p1, Player p2) {
-                Integer pos1 = p1.getPosition();
-                Integer pos2 = p2.getPosition();
-                if(pos1 == null) {
-                    pos1 = Integer.MAX_VALUE;
-                }
-                if(pos2 == null) {
-                    pos2 = Integer.MAX_VALUE;
-                }
-                return pos1.compareTo(pos2);
-            }
-        });
+        Arrays.sort(players, Player.BY_POSITION);
         String currentUserId;
         try {
             String rawToken = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);

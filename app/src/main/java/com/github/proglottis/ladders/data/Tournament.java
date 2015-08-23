@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 /**
  * Created by james on 19/08/15.
  */
@@ -30,6 +32,13 @@ public class Tournament implements Parcelable {
         players = new Player[playersLength];
         in.readTypedArray(players, Player.CREATOR);
     }
+
+    public static final Comparator<Tournament> BY_NAME = new Comparator<Tournament>() {
+        @Override
+        public int compare(Tournament lhs, Tournament rhs) {
+            return lhs.getName().compareTo(rhs.getName());
+        }
+    };
 
     public static final Creator<Tournament> CREATOR = new Creator<Tournament>() {
         @Override

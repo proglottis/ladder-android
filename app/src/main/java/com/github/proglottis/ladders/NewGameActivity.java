@@ -18,11 +18,11 @@ import com.github.proglottis.ladders.data.Player;
 import com.github.proglottis.ladders.data.Rank;
 import com.github.proglottis.ladders.data.Token;
 import com.github.proglottis.ladders.data.Tournament;
+import com.github.proglottis.ladders.requests.CreateGameRequest;
 
 import org.json.JSONException;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class NewGameActivity extends AppCompatActivity implements View.OnClickListener, Response.Listener<Game> {
     private static final String TAG = NewGameActivity.class.getSimpleName();
@@ -49,12 +49,7 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
 
 
         players = tournament.getPlayers();
-        Arrays.sort(players, new Comparator<Player>() {
-            @Override
-            public int compare(Player lhs, Player rhs) {
-                return lhs.getUser().getName().compareTo(rhs.getUser().getName());
-            }
-        });
+        Arrays.sort(players, Player.BY_NAME);
         token = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);
         String currentUserId;
         try {

@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 /**
  * Created by james on 19/08/15.
  */
@@ -27,6 +29,28 @@ public class Player implements Parcelable {
         winningStreakCount = in.readInt();
         user = in.readParcelable(User.class.getClassLoader());
     }
+
+    public static final Comparator<Player> BY_NAME = new Comparator<Player>() {
+        @Override
+        public int compare(Player lhs, Player rhs) {
+            return lhs.getUser().getName().compareTo(rhs.getUser().getName());
+        }
+    };
+
+    public static final Comparator<Player> BY_POSITION = new Comparator<Player>() {
+        @Override
+        public int compare(Player p1, Player p2) {
+            Integer pos1 = p1.getPosition();
+            Integer pos2 = p2.getPosition();
+            if(pos1 == null) {
+                pos1 = Integer.MAX_VALUE;
+            }
+            if(pos2 == null) {
+                pos2 = Integer.MAX_VALUE;
+            }
+            return pos1.compareTo(pos2);
+        }
+    };
 
     public static final Creator<Player> CREATOR = new Creator<Player>() {
         @Override

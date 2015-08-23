@@ -1,4 +1,4 @@
-package com.github.proglottis.ladders;
+package com.github.proglottis.ladders.requests;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
