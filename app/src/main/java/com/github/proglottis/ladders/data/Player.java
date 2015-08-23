@@ -13,6 +13,7 @@ import java.util.Comparator;
  */
 public class Player implements Parcelable {
 
+    public static final int STREAK_THRESHOLD = 3;
     private String id;
     private Integer position;
     private Integer losingStreakCount;
@@ -88,6 +89,18 @@ public class Player implements Parcelable {
         parcel.writeInt(losingStreakCount);
         parcel.writeInt(winningStreakCount);
         parcel.writeParcelable(user, i);
+    }
+
+    public boolean hasStreak() {
+        return winningStreakCount + losingStreakCount >= STREAK_THRESHOLD;
+    }
+
+    public boolean hasWinningStreak() {
+        return winningStreakCount >= STREAK_THRESHOLD;
+    }
+
+    public Integer getStreakCount() {
+        return winningStreakCount + losingStreakCount;
     }
 
     public String getId() {

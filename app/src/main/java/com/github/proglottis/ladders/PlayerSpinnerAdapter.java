@@ -1,6 +1,7 @@
 package com.github.proglottis.ladders;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,10 +19,12 @@ public class PlayerSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
 
     private final Context context;
     private final Player[] players;
+    private final String currentUserId;
 
-    public PlayerSpinnerAdapter(Context context, Player[] players) {
+    public PlayerSpinnerAdapter(Context context, Player[] players, String currentUserId) {
         this.context = context;
         this.players = players;
+        this.currentUserId = currentUserId;
     }
 
     static class ViewHolder {
@@ -46,6 +49,12 @@ public class PlayerSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
             holder = (ViewHolder) convertView.getTag();
         }
         Picasso.with(context).load(player.getUser().getImageURL()).into(holder.image);
+
+        if(player.getUser().getId().equals(currentUserId)) {
+            holder.name.setTypeface(null, Typeface.BOLD);
+        } else {
+            holder.name.setTypeface(null, Typeface.NORMAL);
+        }
         holder.name.setText(player.getUser().getName());
         return convertView;
     }

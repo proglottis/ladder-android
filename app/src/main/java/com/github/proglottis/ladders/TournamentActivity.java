@@ -107,7 +107,7 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
         } catch (JSONException e) {
             currentUserId = null;
         }
-        playerList.setAdapter(new PlayerListAdapter(this, currentUserId, players));
+        playerList.setAdapter(new PlayerListAdapter(this, players, currentUserId));
     }
 
     public void showContent() {

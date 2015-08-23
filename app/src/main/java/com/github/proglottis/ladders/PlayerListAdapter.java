@@ -1,6 +1,7 @@
 package com.github.proglottis.ladders;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,10 +39,10 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PlayerListAdapter(Context context, String currentUserId, Player[] players) {
+    public PlayerListAdapter(Context context, Player[] players, String currentUserId) {
         this.context = context;
-        this.currentUserId = currentUserId;
         this.players = players;
+        this.currentUserId = currentUserId;
     }
 
     // Create new views (invoked by the layout manager)
@@ -63,19 +64,20 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         Picasso.with(context).load(player.getUser().getImageURL()).into(holder.image);
 
         if(player.getUser().getId().equals(currentUserId)) {
-            holder.name.setText(player.getUser().getName() + " *");
+            holder.name.setTypeface(null, Typeface.BOLD);
         } else {
-            holder.name.setText(player.getUser().getName());
+            holder.name.setTypeface(null, Typeface.NORMAL);
         }
+        holder.name.setText(player.getUser().getName());
 
-        if(player.getWinningStreakCount() >= 3) {
+        if(player.hasStreak()) {
             holder.streak.setVisibility(View.VISIBLE);
-            holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_green));
-            holder.streak.setText(String.valueOf(player.getWinningStreakCount()));
-        } else if(player.getLosingStreakCount() >= 3) {
-            holder.streak.setVisibility(View.VISIBLE);
-            holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_red));
-            holder.streak.setText(String.valueOf(player.getLosingStreakCount()));
+            holder.streak.setText(String.valueOf(player.getStreakCount()));
+            if(player.hasWinningStreak()) {
+                holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_green));
+            } else {
+                holder.streak.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.lozenge_red));
+            }
         } else {
             holder.streak.setVisibility(View.INVISIBLE);
         }

@@ -64,8 +64,8 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
         }
-        player1Spin.setAdapter(new PlayerSpinnerAdapter(this, players));
-        player2Spin.setAdapter(new PlayerSpinnerAdapter(this, players));
+        player1Spin.setAdapter(new PlayerSpinnerAdapter(this, players, currentUserId));
+        player2Spin.setAdapter(new PlayerSpinnerAdapter(this, players, currentUserId));
         player1Spin.setSelection(playerPosition);
     }
 
