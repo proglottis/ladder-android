@@ -20,4 +20,5 @@
     <string name="winner">Winner</string>
     <string name="request_failed">Request failed</string>
     <string name="game_created">Game created!</string>
+    <string name="retry">Retry</string>
 </resources>

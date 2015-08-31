@@ -12,11 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Player;
 import com.github.proglottis.ladders.data.Token;
 import com.github.proglottis.ladders.data.Tournament;
@@ -26,7 +24,7 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 
-public class TournamentActivity extends AppCompatActivity implements Response.Listener<Tournament>, View.OnClickListener {
+public class TournamentActivity extends AppCompatActivity implements Response.Listener<Tournament>, Response.ErrorListener, View.OnClickListener {
     private static final String TAG = TournamentActivity.class.getSimpleName();
     public static final String TOURNAMENT_ID = "com.github.proglottis.ladders.tournament_id";
     public static final String TOURNAMENT_NAME = "com.github.proglottis.ladders.tournament_name";
@@ -74,23 +72,29 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
     }
 
     private void makeRequest(String tournamentId) {
+        showProgressBar();
         String token = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);
-        TournamentRequest req = new TournamentRequest(tournamentId, token, this,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError e) {
-                        showContent();
-                        VolleyLog.d(TAG, "Error: " + e.getLocalizedMessage());
-                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        TournamentRequest req = new TournamentRequest(tournamentId, token, this, this);
         AppController.getInstance().addToRequestQueue(req, TAG);
     }
 
     public void onResponse(Tournament tournament) {
+        hideProgressBar();
         this.tournament = tournament;
-        showContent();
         updateView();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        hideProgressBar();
+        Snackbar.make(content, R.string.request_failed, Snackbar.LENGTH_LONG)
+                .setAction(R.string.retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        makeRequest(tournament.getId());
+                    }
+                })
+                .show();
     }
 
     public void updateView() {
@@ -110,7 +114,12 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
         playerList.setAdapter(new PlayerListAdapter(this, players, currentUserId));
     }
 
-    public void showContent() {
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        content.setVisibility(View.INVISIBLE);
+    }
+
+    public void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
         content.setVisibility(View.VISIBLE);
     }
@@ -139,6 +148,7 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
 
     @Override
     public void onClick(View view) {
+        Log.d("Id: ", String.valueOf(view.getId()));
         switch(view.getId()) {
         case R.id.new_game_btn:
             Intent intent = new Intent(this, NewGameActivity.class);

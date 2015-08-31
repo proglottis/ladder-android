@@ -3,21 +3,20 @@ package com.github.proglottis.ladders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.github.proglottis.ladders.data.Tournament;
 import com.github.proglottis.ladders.requests.TournamentListRequest;
 
-public class TournamentListActivity extends AppCompatActivity implements Response.Listener<Tournament[]>,TournamentListAdapter.OnItemSelectedListener {
+public class TournamentListActivity extends AppCompatActivity implements Response.Listener<Tournament[]>, Response.ErrorListener,TournamentListAdapter.OnItemSelectedListener {
     private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
     private View progressBar;
@@ -37,30 +36,43 @@ public class TournamentListActivity extends AppCompatActivity implements Respons
         makeRequest();
     }
 
-    private void showContent() {
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        content.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
         content.setVisibility(View.VISIBLE);
     }
 
     private void makeRequest() {
+        showProgressBar();
         String token = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);
-        TournamentListRequest req = new TournamentListRequest(token, this,
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError e) {
-                    VolleyLog.d(TAG, "Error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+        TournamentListRequest req = new TournamentListRequest(token, this, this);
         AppController.getInstance().addToRequestQueue(req, TAG);
     }
 
     @Override
     public void onResponse(Tournament[] tournaments) {
+        hideProgressBar();
         this.tournaments = tournaments;
-        showContent();
         TournamentListAdapter adapter = new TournamentListAdapter(TournamentListActivity.this, tournaments, this);
         recycler.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        hideProgressBar();
+        Snackbar.make(content, R.string.request_failed, Snackbar.LENGTH_LONG)
+                .setAction(R.string.retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        makeRequest();
+                    }
+                })
+                .show();
     }
 
     @Override
