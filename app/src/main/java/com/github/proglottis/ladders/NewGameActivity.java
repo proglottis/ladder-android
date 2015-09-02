@@ -24,14 +24,17 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class NewGameActivity extends AppCompatActivity implements View.OnClickListener, Response.Listener<Game> {
     private static final String TAG = NewGameActivity.class.getSimpleName();
 
     public static final String TOURNAMENT_EXTRA = "com.github.proglottis.ladders.tournament_extra";
     private Tournament tournament;
-    private Spinner player1Spin;
-    private Spinner player2Spin;
-    private Button createBtn;
+    @Bind(R.id.player1_spin) Spinner player1Spin;
+    @Bind(R.id.player2_spin) Spinner player2Spin;
+    @Bind(R.id.create_game) Button createBtn;
     private Player[] players;
     private String token;
 
@@ -39,14 +42,10 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
+        ButterKnife.bind(this);
 
         tournament = getIntent().getParcelableExtra(TOURNAMENT_EXTRA);
-
-        player1Spin = (Spinner) findViewById(R.id.player1_spin);
-        player2Spin = (Spinner) findViewById(R.id.player2_spin);
-        createBtn = (Button) findViewById(R.id.create_game);
         createBtn.setOnClickListener(this);
-
 
         players = tournament.getPlayers();
         Arrays.sort(players, Player.BY_NAME);

@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.github.proglottis.ladders.data.Player;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by james on 20/08/15.
  */
@@ -25,16 +28,14 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView position;
-        public TextView name;
-        public ImageView image;
-        public TextView streak;
+        @Bind(R.id.position) TextView position;
+        @Bind(R.id.name) TextView name;
+        @Bind(R.id.image) ImageView image;
+        @Bind(R.id.streak) TextView streak;
+
         public ViewHolder(View v) {
             super(v);
-            position = (TextView) v.findViewById(R.id.position);
-            name = (TextView) v.findViewById(R.id.name);
-            image = (ImageView) v.findViewById(R.id.image);
-            streak = (TextView) v.findViewById(R.id.streak);
+            ButterKnife.bind(this, v);
         }
     }
 

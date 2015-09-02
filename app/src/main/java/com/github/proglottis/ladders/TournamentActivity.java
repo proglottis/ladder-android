@@ -24,27 +24,29 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class TournamentActivity extends AppCompatActivity implements Response.Listener<Tournament>, Response.ErrorListener, View.OnClickListener {
     private static final String TAG = TournamentActivity.class.getSimpleName();
     public static final String TOURNAMENT_ID = "com.github.proglottis.ladders.tournament_id";
     public static final String TOURNAMENT_NAME = "com.github.proglottis.ladders.tournament_name";
     public static final int NEW_GAME_REQUEST = 1000;
+
     private Tournament tournament;
-    private View progressBar;
-    private View content;
-    private RecyclerView playerList;
-    private FloatingActionButton newGameBtn;
+
+    @Bind(R.id.progress) View progressBar;
+    @Bind(R.id.content) View content;
+    @Bind(R.id.player_list) RecyclerView playerList;
+    @Bind(R.id.new_game_btn) FloatingActionButton newGameBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament);
+        ButterKnife.bind(this);
 
-        progressBar = findViewById(R.id.progress);
-        content = findViewById(R.id.content);
-        playerList = (RecyclerView) findViewById(R.id.player_list);
         playerList.setLayoutManager(new LinearLayoutManager(this));
-        newGameBtn = (FloatingActionButton) findViewById(R.id.new_game_btn);
         newGameBtn.setOnClickListener(this);
 
         tournament = new Tournament();

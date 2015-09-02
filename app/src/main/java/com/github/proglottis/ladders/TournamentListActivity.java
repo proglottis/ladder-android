@@ -16,21 +16,23 @@ import com.android.volley.VolleyError;
 import com.github.proglottis.ladders.data.Tournament;
 import com.github.proglottis.ladders.requests.TournamentListRequest;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class TournamentListActivity extends AppCompatActivity implements Response.Listener<Tournament[]>, Response.ErrorListener,TournamentListAdapter.OnItemSelectedListener {
     private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
-    private View progressBar;
-    private View content;
-    private RecyclerView recycler;
+
+    @Bind(R.id.progress) View progressBar;
+    @Bind(R.id.content) View content;
+    @Bind(R.id.recycler) RecyclerView recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament_list);
+        ButterKnife.bind(this);
 
-        progressBar = findViewById(R.id.progress);
-        content = findViewById(R.id.content);
-        recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
         makeRequest();

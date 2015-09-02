@@ -15,6 +15,9 @@ import com.android.volley.VolleyError;
 import com.github.proglottis.ladders.data.AuthToken;
 import com.github.proglottis.ladders.requests.AuthTokenRequest;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class AuthActivity extends AppCompatActivity implements Response.Listener<AuthToken>, OAuth2WebViewClient.Callback {
     private static final String TAG = AuthActivity.class.getSimpleName();
     public static final String AUTH_URL = "com.github.proglottis.ladders.auth_url";
@@ -22,20 +25,19 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
 
     private String url;
     private String state;
-    private View progressBar;
-    private WebView webView;
+    @Bind(R.id.progress) View progressBar;
+    @Bind(R.id.web_view) WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         url = intent.getStringExtra(AUTH_URL);
         state = intent.getStringExtra(AUTH_STATE);
 
-        progressBar = findViewById(R.id.progress);
-        webView = (WebView) findViewById(R.id.web_view);
         webView.setWebViewClient(new OAuth2WebViewClient(getString(R.string.google_redirect_uri), this));
     }
 

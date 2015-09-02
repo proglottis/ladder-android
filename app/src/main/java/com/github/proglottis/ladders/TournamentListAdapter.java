@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import com.github.proglottis.ladders.data.Tournament;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by james on 19/08/15.
  */
@@ -48,12 +51,12 @@ public class TournamentListAdapter extends RecyclerView.Adapter<TournamentListAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         View root;
-        TextView name;
+        @Bind(R.id.name) TextView name;
 
         public ViewHolder(View v) {
             super(v);
+            ButterKnife.bind(this, v);
             root = v;
-            name = (TextView) v.findViewById(R.id.name);
         }
     }
 

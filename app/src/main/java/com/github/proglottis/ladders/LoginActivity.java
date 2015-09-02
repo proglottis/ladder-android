@@ -10,14 +10,18 @@ import android.widget.Button;
 
 import java.util.UUID;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    @Bind(R.id.google_btn) Button googleBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
-        Button googleBtn = (Button) findViewById(R.id.google_btn);
         googleBtn.setOnClickListener(this);
     }
 

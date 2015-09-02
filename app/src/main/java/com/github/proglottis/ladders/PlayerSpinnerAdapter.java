@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.github.proglottis.ladders.data.Player;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by james on 21/08/15.
  */
@@ -28,12 +31,11 @@ public class PlayerSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
     }
 
     static class ViewHolder {
-        ImageView image;
-        TextView name;
+        @Bind(R.id.image) ImageView image;
+        @Bind(R.id.name) TextView name;
 
         public ViewHolder(View v) {
-            this.image = (ImageView) v.findViewById(R.id.image);
-            this.name = (TextView) v.findViewById(R.id.name);
+            ButterKnife.bind(this, v);
         }
     }
 
