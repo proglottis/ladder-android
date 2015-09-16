@@ -39,11 +39,6 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
         state = intent.getStringExtra(AUTH_STATE);
 
         webView.setWebViewClient(new OAuth2WebViewClient(getString(R.string.google_redirect_uri), this));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         webView.loadUrl(url);
     }
 
