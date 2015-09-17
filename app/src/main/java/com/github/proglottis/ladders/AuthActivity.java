@@ -78,6 +78,10 @@ public class AuthActivity extends AppCompatActivity implements Response.Listener
     public void onResponse(AuthToken response) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().putString(getString(R.string.api_token), response.getToken()).apply();
+
+        Intent registerGcmIntent = new Intent(this, RegistrationIntentService.class);
+        startService(registerGcmIntent);
+
         Intent intent = new Intent(this, TournamentListActivity.class);
         startActivity(intent);
         finish();

@@ -23,4 +23,5 @@
     <string name="retry">Retry</string>
     <string name="show">Show</string>
     <string name="title_activity_game">Game</string>
+    <string name="sent_token_to_server">sent_token_to_server</string>
 </resources>
