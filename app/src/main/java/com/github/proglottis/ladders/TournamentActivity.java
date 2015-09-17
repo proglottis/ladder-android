@@ -165,7 +165,17 @@ public class TournamentActivity extends AppCompatActivity implements Response.Li
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_GAME_REQUEST && resultCode == RESULT_OK) {
-            Snackbar.make(content, R.string.game_created, Snackbar.LENGTH_LONG).show();
+            final String gameId = data.getStringExtra(NewGameActivity.GAME_ID);
+            Snackbar.make(content, R.string.game_created, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.show, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(TournamentActivity.this, GameActivity.class);
+                            intent.putExtra(GameActivity.GAME_ID, gameId);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
         }
     }
 }

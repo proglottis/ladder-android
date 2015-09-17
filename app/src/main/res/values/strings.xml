@@ -21,4 +21,6 @@
     <string name="request_failed">Request failed</string>
     <string name="game_created">Game created!</string>
     <string name="retry">Retry</string>
+    <string name="show">Show</string>
+    <string name="title_activity_game">Game</string>
 </resources>

@@ -45,7 +45,7 @@ public class TournamentRequest extends Request<Tournament> {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
         params.put("Authorization", "Bearer " + token);
         return params;
     }

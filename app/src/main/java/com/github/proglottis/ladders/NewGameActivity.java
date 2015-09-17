@@ -1,5 +1,6 @@
 package com.github.proglottis.ladders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
     private static final String TAG = NewGameActivity.class.getSimpleName();
 
     public static final String TOURNAMENT_EXTRA = "com.github.proglottis.ladders.tournament_extra";
+    public static final String GAME_ID = "GAME_ID";
     private Tournament tournament;
     @Bind(R.id.player1_spin) Spinner player1Spin;
     @Bind(R.id.player2_spin) Spinner player2Spin;
@@ -121,7 +123,9 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onResponse(Game response) {
-        setResult(RESULT_OK);
+        Intent intent = new Intent();
+        intent.putExtra(GAME_ID, response.getId());
+        setResult(RESULT_OK, intent);
         finish();
     }
 }
