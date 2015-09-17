@@ -89,4 +89,15 @@ public class Game {
     public void setRanks(Rank[] ranks) {
         this.ranks = ranks;
     }
+
+    public String title() {
+        String s = "";
+        for (Rank rank : ranks) {
+            if (!s.isEmpty()) {
+                s += " vs ";
+            }
+            s += rank.getPlayer().getUser().getName();
+        }
+        return s;
+    }
 }
