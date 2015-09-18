@@ -101,6 +101,15 @@ public class Game {
         return true;
     }
 
+    public boolean isConfirmed(String userId) {
+        for (Rank rank: ranks) {
+            if (rank.getPlayer().getUser().getId().equals(userId) && rank.isConfirmed()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String title() {
         String s = "";
         for (Rank rank : ranks) {

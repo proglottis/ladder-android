@@ -14,8 +14,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.proglottis.ladders.data.Game;
 import com.github.proglottis.ladders.data.GameUpdate;
+import com.github.proglottis.ladders.data.Token;
 import com.github.proglottis.ladders.requests.GameRequest;
 import com.github.proglottis.ladders.requests.UpdateGameRequest;
+
+import org.json.JSONException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,8 +63,15 @@ public class GameActivity extends AppCompatActivity implements Response.Listener
     @Override
     public void onResponse(Game game) {
         hideProgressBar();
+        String currentUserId;
+        try {
+            String rawToken = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);
+            currentUserId = Token.decode(rawToken).getUserId();
+        } catch (JSONException e) {
+            currentUserId = null;
+        }
         setTitle(game.title());
-        rankList.setAdapter(new GameAdapter(game, this));
+        rankList.setAdapter(new GameAdapter(game, currentUserId, this));
     }
 
     @Override

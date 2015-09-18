@@ -26,9 +26,11 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
     private static final int RANK_VIEW = 2;
     private final Game game;
     private final GameInteractionListener listener;
+    private final String currentUserId;
 
-    public GameAdapter(Game game, GameInteractionListener listener) {
+    public GameAdapter(Game game, String currentUserId, GameInteractionListener listener) {
         this.game = game;
+        this.currentUserId = currentUserId;
         this.listener = listener;
     }
 
@@ -43,7 +45,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 break;
             case FOOTER_VIEW:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_footer, parent, false);
-                holder = new FooterViewHolder(itemView, listener);
+                holder = new FooterViewHolder(itemView, currentUserId, listener);
                 break;
         }
         return holder;
@@ -69,6 +71,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
     }
 
     public static abstract class ViewHolder extends RecyclerView.ViewHolder {
+
         public ViewHolder(View itemView) {
             super(itemView);
         }
@@ -105,16 +108,18 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
     public static class FooterViewHolder extends GameAdapter.ViewHolder {
         @Bind(R.id.confirm_btn) Button confirmBtn;
 
+        private String currentUserId;
         private final GameInteractionListener listener;
 
-        public FooterViewHolder(View itemView, GameInteractionListener listener) {
+        public FooterViewHolder(View itemView, String currentUserId, GameInteractionListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.currentUserId = currentUserId;
             this.listener = listener;
         }
 
         public void bindView(final Game game, int position) {
-            if (game.isConfirmed()) {
+            if (game.isConfirmed(currentUserId)) {
                 confirmBtn.setVisibility(View.GONE);
                 confirmBtn.setOnClickListener(null);
             } else {
