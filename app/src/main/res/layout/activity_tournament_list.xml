@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.github.proglottis.ladders.TournamentListActivity">
 
     <RelativeLayout
@@ -47,7 +46,6 @@
             android:scrollbars="vertical"
             android:layout_gravity="start"
             android:layout_width="match_parent"
-            android:paddingTop="16dp"
             android:layout_height="match_parent" />
 
     </android.support.design.widget.NavigationView>
