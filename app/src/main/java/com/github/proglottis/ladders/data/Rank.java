@@ -3,14 +3,20 @@ package com.github.proglottis.ladders.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by james on 21/08/15.
  */
 public class Rank {
+    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     private String id;
     private int position;
     private String playerId;
     private Player player;
+    private Date confirmedAt;
 
     public Rank() {
     }
@@ -28,6 +34,14 @@ public class Rank {
             r.playerId = obj.getString("player_id");
         }
         r.player = Player.fromJSON(obj.getJSONObject("player"));
+        String rawConfirmedAt = obj.getString("confirmed_at");
+        if (rawConfirmedAt != null) {
+            try {
+                r.confirmedAt = DATE_FORMAT.parse(rawConfirmedAt);
+            } catch (ParseException e) {
+                r.confirmedAt = null;
+            }
+        }
         return r;
     }
 
@@ -68,5 +82,17 @@ public class Rank {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public Date getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public void setConfirmedAt(Date confirmedAt) {
+        this.confirmedAt = confirmedAt;
+    }
+
+    public boolean isConfirmed() {
+        return confirmedAt != null;
     }
 }

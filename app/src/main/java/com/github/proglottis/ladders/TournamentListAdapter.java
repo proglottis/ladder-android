@@ -30,18 +30,13 @@ public class TournamentListAdapter extends RecyclerView.Adapter<TournamentListAd
     @Override
     public TournamentListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.tournament_list_item, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, listener);
     }
 
     @Override
     public void onBindViewHolder(TournamentListAdapter.ViewHolder holder, final int position) {
-        holder.name.setText(values[position].getName());
-        holder.root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemSelected(position);
-            }
-        });
+        Tournament tournament = values[position];
+        holder.bindView(tournament);
     }
 
     @Override
@@ -50,17 +45,27 @@ public class TournamentListAdapter extends RecyclerView.Adapter<TournamentListAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        View root;
+        private final OnItemSelectedListener listener;
         @Bind(R.id.name) TextView name;
 
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-            root = v;
+        public ViewHolder(View itemView, OnItemSelectedListener listener) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            this.listener = listener;
+        }
+
+        public void bindView(final Tournament tournament) {
+            name.setText(tournament.getName());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemSelected(tournament);
+                }
+            });
         }
     }
 
     public interface OnItemSelectedListener {
-        void onItemSelected(int position);
+        void onItemSelected(Tournament tournament);
     }
 }

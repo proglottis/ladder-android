@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by james on 21/08/15.
  */
@@ -88,6 +90,15 @@ public class Game {
 
     public void setRanks(Rank[] ranks) {
         this.ranks = ranks;
+    }
+
+    public boolean isConfirmed() {
+        for (Rank rank: ranks) {
+            if (!rank.isConfirmed()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String title() {

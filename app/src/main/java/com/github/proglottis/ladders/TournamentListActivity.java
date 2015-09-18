@@ -100,13 +100,10 @@ public class TournamentListActivity extends AppCompatActivity implements Respons
     }
 
     @Override
-    public void onItemSelected(int position) {
-        if(tournaments == null) {
-            return;
-        }
+    public void onItemSelected(final Tournament tournament) {
         Intent intent = new Intent(this, TournamentActivity.class);
-        intent.putExtra(TournamentActivity.TOURNAMENT_ID, tournaments[position].getId());
-        intent.putExtra(TournamentActivity.TOURNAMENT_NAME, tournaments[position].getName());
+        intent.putExtra(TournamentActivity.TOURNAMENT_ID, tournament.getId());
+        intent.putExtra(TournamentActivity.TOURNAMENT_NAME, tournament.getName());
         startActivity(intent);
     }
 }
