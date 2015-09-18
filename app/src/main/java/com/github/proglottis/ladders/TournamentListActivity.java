@@ -13,19 +13,29 @@ import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.github.proglottis.ladders.data.Game;
 import com.github.proglottis.ladders.data.Tournament;
+import com.github.proglottis.ladders.requests.PendingGamesRequest;
 import com.github.proglottis.ladders.requests.TournamentListRequest;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class TournamentListActivity extends AppCompatActivity implements Response.Listener<Tournament[]>, Response.ErrorListener,TournamentListAdapter.OnItemSelectedListener {
+public class TournamentListActivity extends AppCompatActivity implements
+        Response.Listener<Tournament[]>, Response.ErrorListener,
+        TournamentListAdapter.OnItemSelectedListener,
+        PendingGamesRequest.Listener, PendingGamesAdapter.OnPendingGameSelectedListener {
+
     private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
 
     @Bind(R.id.progress) View progressBar;
     @Bind(R.id.content) View content;
     @Bind(R.id.recycler) RecyclerView recycler;
+    @Bind(R.id.game_list) RecyclerView gameRecycler;
+    @Bind(R.id.pending_games_progress) View gamesProgess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +44,10 @@ public class TournamentListActivity extends AppCompatActivity implements Respons
         ButterKnife.bind(this);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
+        gameRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         makeRequest();
+        loadPendingGames();
     }
 
     private void showProgressBar() {
@@ -46,6 +58,24 @@ public class TournamentListActivity extends AppCompatActivity implements Respons
     private void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
         content.setVisibility(View.VISIBLE);
+    }
+
+    private void showGamesProgressBar() {
+        gamesProgess.setVisibility(View.VISIBLE);
+        gameRecycler.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void hideGamesProgressBar() {
+        gameRecycler.setVisibility(View.VISIBLE);
+        gamesProgess.setVisibility(View.INVISIBLE);
+    }
+
+    private void loadPendingGames() {
+        showGamesProgressBar();
+        String token = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.api_token), null);
+        PendingGamesRequest req = new PendingGamesRequest(token, this);
+        AppController.getInstance().addToRequestQueue(req, TAG);
     }
 
     private void makeRequest() {
@@ -63,6 +93,19 @@ public class TournamentListActivity extends AppCompatActivity implements Respons
         recycler.setAdapter(adapter);
     }
 
+
+    @Override
+    public void onResponse(List<Game> response) {
+        PendingGamesAdapter adapter = new PendingGamesAdapter(this, response, this);
+        gameRecycler.setAdapter(adapter);
+        hideGamesProgressBar();
+    }
+
+    @Override
+    public void onPendingGamesError(VolleyError error) {
+        hideGamesProgressBar();
+
+    }
 
     @Override
     public void onErrorResponse(VolleyError error) {
@@ -104,6 +147,13 @@ public class TournamentListActivity extends AppCompatActivity implements Respons
         Intent intent = new Intent(this, TournamentActivity.class);
         intent.putExtra(TournamentActivity.TOURNAMENT_ID, tournament.getId());
         intent.putExtra(TournamentActivity.TOURNAMENT_NAME, tournament.getName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPendingGameSelected(String gameId) {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(GameActivity.GAME_ID, gameId);
         startActivity(intent);
     }
 }

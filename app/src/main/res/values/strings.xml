@@ -24,4 +24,6 @@
     <string name="show">Show</string>
     <string name="title_activity_game">Game</string>
     <string name="sent_token_to_server">sent_token_to_server</string>
+    <string name="pending_games">Pending games</string>
+    <string name="notification_title">%1$s has logged a game against you.</string>
 </resources>
