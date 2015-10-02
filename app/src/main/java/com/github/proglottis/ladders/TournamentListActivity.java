@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +32,11 @@ public class TournamentListActivity extends AppCompatActivity implements
     private static final String TAG = TournamentListActivity.class.getSimpleName();
     private Tournament[] tournaments;
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.layout) View layout;
     @Bind(R.id.progress) View progressBar;
-    @Bind(R.id.content) View content;
-    @Bind(R.id.recycler) RecyclerView recycler;
-    @Bind(R.id.game_list) RecyclerView gameRecycler;
+    @Bind(R.id.list) RecyclerView list;
+    @Bind(R.id.game_list) RecyclerView gameList;
     @Bind(R.id.pending_games_progress) View gamesProgess;
 
     @Override
@@ -42,9 +44,10 @@ public class TournamentListActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament_list);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-        gameRecycler.setLayoutManager(new LinearLayoutManager(this));
+        list.setLayoutManager(new LinearLayoutManager(this));
+        gameList.setLayoutManager(new LinearLayoutManager(this));
 
         makeRequest();
         loadPendingGames();
@@ -52,22 +55,20 @@ public class TournamentListActivity extends AppCompatActivity implements
 
     private void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
-        content.setVisibility(View.INVISIBLE);
     }
 
     private void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
-        content.setVisibility(View.VISIBLE);
     }
 
     private void showGamesProgressBar() {
         gamesProgess.setVisibility(View.VISIBLE);
-        gameRecycler.setVisibility(View.INVISIBLE);
+        gameList.setVisibility(View.INVISIBLE);
 
     }
 
     private void hideGamesProgressBar() {
-        gameRecycler.setVisibility(View.VISIBLE);
+        gameList.setVisibility(View.VISIBLE);
         gamesProgess.setVisibility(View.INVISIBLE);
     }
 
@@ -90,14 +91,14 @@ public class TournamentListActivity extends AppCompatActivity implements
         hideProgressBar();
         this.tournaments = tournaments;
         TournamentListAdapter adapter = new TournamentListAdapter(TournamentListActivity.this, tournaments, this);
-        recycler.setAdapter(adapter);
+        list.setAdapter(adapter);
     }
 
 
     @Override
     public void onResponse(List<Game> response) {
         PendingGamesAdapter adapter = new PendingGamesAdapter(this, response, this);
-        gameRecycler.setAdapter(adapter);
+        gameList.setAdapter(adapter);
         hideGamesProgressBar();
     }
 
@@ -110,7 +111,7 @@ public class TournamentListActivity extends AppCompatActivity implements
     @Override
     public void onErrorResponse(VolleyError error) {
         hideProgressBar();
-        Snackbar.make(content, R.string.request_failed, Snackbar.LENGTH_LONG)
+        Snackbar.make(layout, R.string.request_failed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
